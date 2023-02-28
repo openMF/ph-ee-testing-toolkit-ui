@@ -339,6 +339,14 @@ class APIManagement extends React.Component {
         }
     };
 
+    getSelectedVersionURLData = async () => {
+        const res = await axios.get(this.getSelectedVersionURL());
+        console.log(res.data);
+        const result = JSON.parse(res.data);
+        console.log(result);
+        return result;
+    };
+
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {

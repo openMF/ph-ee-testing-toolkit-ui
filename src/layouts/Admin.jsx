@@ -139,7 +139,7 @@ class Admin extends React.Component {
                                             <Content>
                                                 <Header
                                                     style={{
-                                                        height: '3vh',
+                                                        height: '0vh',
                                                         background: '#293e5d',
                                                     }}
                                                 />

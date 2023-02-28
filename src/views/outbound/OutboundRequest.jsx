@@ -1040,167 +1040,169 @@ class OutboundRequest extends React.Component {
                 <Row>
                     <Col span={24}>
                         <Affix offsetTop={2}>
-                            <Row align='top'>
-                                <Col span={12}>
-                                    <Button
-                                        type='primary' className='mt-2' style={{ height: '40px', backgroundColor: '#718ebc' }} onClick={() => {
-                                            this.setState({ fileBrowserVisible: true });
-                                        }}
-                                    >
-                                        <Text style={{ color: 'white', fontWeight: 'bold' }}>Collections Manager</Text> <CaretRightFilled style={{ fontSize: '18px' }} />
-                                    </Button>
-                                </Col>
-                                <Col span={12}>
-                                    <Button
-                                        type='primary' className='mt-2 float-right' style={{ height: '40px', backgroundColor: '#718ebc' }} onClick={() => {
-                                            this.setState({ environmentManagerVisible: true });
-                                        }}
-                                    >
-                                        <CaretLeftFilled style={{ fontSize: '18px' }} /> <Text style={{ color: 'white', fontWeight: 'bold' }}>Environment Manager</Text>
-                                    </Button>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={24}>
-                                    <Card className='mb-4'>
-                                        <Row>
-                                            <Col span={10} />
-                                            <Col span={4} className='text-center'>
-                                                {
-                                                    this.state.totalAssertionsCount > 0
-                                                        ? (
-                                                            <>
-                                                                <Row>
-                                                                    <Col span={24}>
-                                                                        <Progress percent={Math.round((this.state.totalPassedCount + this.state.totalFailedCount) * 100 / this.state.totalAssertionsCount)} width={50} format={() => (this.state.totalPassedCount + this.state.totalFailedCount) + ' / ' + this.state.totalAssertionsCount} />
-                                                                    </Col>
-                                                                </Row>
-                                                                <Row className='mt-4'>
-                                                                    <Col span={8}>
-                                                                        <Badge count='PASSED' style={{ backgroundColor: TTKColors.assertionPassed }}>
-                                                                            <Progress type='circle' width={50} status='success' percent={100} format={() => this.state.totalPassedCount} />
-                                                                        </Badge>
-                                                                    </Col>
-                                                                    <Col span={8}>
-                                                                        <Badge count='FAILED' style={{ backgroundColor: TTKColors.assertionFailed }}>
-                                                                            <Progress type='circle' width={50} status='exception' percent={100} format={() => this.state.totalFailedCount} />
-                                                                        </Badge>
-                                                                    </Col>
-                                                                    <Col span={8}>
-                                                                        <Badge count='TOTAL' style={{ backgroundColor: '#108ee9' }}>
-                                                                            <Progress type='circle' width={50} status='normal' percent={100} format={() => this.state.totalAssertionsCount} />
-                                                                        </Badge>
-                                                                    </Col>
-                                                                </Row>
-                                                            </>
-                                                        )
-                                                        : null
-                                                }
-                                            </Col>
-                                            <Col span={10}>
-                                                <Row>
-                                                    <Col span='24'>
-                                                        <Button
-                                                            className='float-right'
-                                                            type='primary'
-                                                            danger
-                                                            onClick={this.handleSendStopClick}
-                                                        >
-                                                            {this.state.sendingOutboundRequestID ? (this.state.resetExecutionOptionEnabled ? 'Reset' : 'Stop') : 'Run'}
-                                                        </Button>
-                                                        <Button
-                                                            className='float-right mr-2'
-                                                            type='dashed'
-                                                            danger
-                                                            onClick={() => { this.setState({ showIterationRunner: true }); }}
-                                                        >
-                              Iteration Runner
-                                                        </Button>
-                                                        <Button
-                                                            className='float-right mr-2'
-                                                            type='dashed'
-                                                            onClick={() => { this.setState({ showTemplate: true }); }}
-                                                        >
-                              Show Current Template
-                                                        </Button>
-                                                        {
-                                                            getConfig().isAuthEnabled
-                                                                ? <>
-                                                                    <Button
-                                                                        className='float-right' type='primary' danger onClick={async e => {
-                                                                            this.setState({ historyReportsLocal: await this.historyReportsLocal() });
-                                                                            this.setState({ historyReportsVisible: true });
-                                                                        }}
-                                                                    >
-                                    Reports History
-                                                                    </Button>
-                                                                    {
-                                                                        this.state.historyReportsVisible
-                                                                            ? <Modal
-                                                                                title='Reports History'
-                                                                                visible={this.state.historyReportsVisible}
-                                                                                width='70%'
-                                                                                onOk={() => {
-                                                                                    this.setState({ historyReportsVisible: false });
-                                                                                }}
-                                                                                onCancel={() => {
-                                                                                    this.setState({ historyReportsVisible: false });
-                                                                                }}
-                                                                            >
-                                                                                <Row>
-                                                                                    <Col>
-                                                                                        <Table
-                                                                                            columns={this.state.historyReportsColumns}
-                                                                                            dataSource={this.historyReportsDataSource()}
-                                                                                        />
-                                                                                    </Col>
-                                                                                </Row>
-                                                                            </Modal>
-                                                                            : null
-                                                                    }
+                            <div>
+                                <Row align='top'>
+                                    <Col span={12}>
+                                        <Button
+                                            type='primary' className='mt-2' style={{ height: '40px', backgroundColor: '#718ebc' }} onClick={() => {
+                                                this.setState({ fileBrowserVisible: true });
+                                            }}
+                                        >
+                                            <Text style={{ color: 'white', fontWeight: 'bold' }}>Collections Manager</Text> <CaretRightFilled style={{ fontSize: '18px' }} />
+                                        </Button>
+                                    </Col>
+                                    <Col span={12}>
+                                        <Button
+                                            type='primary' className='mt-2 float-right' style={{ height: '40px', backgroundColor: '#718ebc' }} onClick={() => {
+                                                this.setState({ environmentManagerVisible: true });
+                                            }}
+                                        >
+                                            <CaretLeftFilled style={{ fontSize: '18px' }} /> <Text style={{ color: 'white', fontWeight: 'bold' }}>Environment Manager</Text>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col span={24}>
+                                        <Card className='mb-4'>
+                                            <Row>
+                                                <Col span={10} />
+                                                <Col span={4} className='text-center'>
+                                                    {
+                                                        this.state.totalAssertionsCount > 0
+                                                            ? (
+                                                                <>
+                                                                    <Row>
+                                                                        <Col span={24}>
+                                                                            <Progress percent={Math.round((this.state.totalPassedCount + this.state.totalFailedCount) * 100 / this.state.totalAssertionsCount)} width={50} format={() => (this.state.totalPassedCount + this.state.totalFailedCount) + ' / ' + this.state.totalAssertionsCount} />
+                                                                        </Col>
+                                                                    </Row>
+                                                                    <Row className='mt-4'>
+                                                                        <Col span={8}>
+                                                                            <Badge count='PASSED' style={{ backgroundColor: TTKColors.assertionPassed }}>
+                                                                                <Progress type='circle' width={50} status='success' percent={100} format={() => this.state.totalPassedCount} />
+                                                                            </Badge>
+                                                                        </Col>
+                                                                        <Col span={8}>
+                                                                            <Badge count='FAILED' style={{ backgroundColor: TTKColors.assertionFailed }}>
+                                                                                <Progress type='circle' width={50} status='exception' percent={100} format={() => this.state.totalFailedCount} />
+                                                                            </Badge>
+                                                                        </Col>
+                                                                        <Col span={8}>
+                                                                            <Badge count='TOTAL' style={{ backgroundColor: '#108ee9' }}>
+                                                                                <Progress type='circle' width={50} status='normal' percent={100} format={() => this.state.totalAssertionsCount} />
+                                                                            </Badge>
+                                                                        </Col>
+                                                                    </Row>
                                                                 </>
-                                                                : null
-                                                        }
-                                                        {
-                                                            this.state.template.test_cases
-                                                                ? (
-                                                                    <Checkbox
-                                                                        className='ml-2 mt-1 float-right'
-                                                                        onClick={e => {
-                                                                            this.handleBreakOnErrorChange(e.target.checked);
-                                                                        }}
-                                                                        checked={this.state.template.options?.breakOnError}
-                                                                    >
-                                                                        Break test run on error
-                                                                    </Checkbox>
-                                                                )
-                                                                : null
-                                                        }
-                                                    </Col>
-                                                </Row>
-                                                <Row className='mt-2'>
-                                                    <Col span='24'>
-                                                        {
-                                                            this.state.testReport
-                                                                ? <Dropdown overlay={this.downloadReportMenu()}>
-                                                                    <Button
-                                                                        className='float-right'
-                                                                        type='primary'
-                                                                        shape='round'
-                                                                        onClick={e => e.preventDefault()}
-                                                                    >
-                                    Download Report
-                                                                    </Button>
-                                                                </Dropdown>
-                                                                : null
-                                                        }
-                                                    </Col>
-                                                </Row>
-                                            </Col>
-                                        </Row>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                                            )
+                                                            : null
+                                                    }
+                                                </Col>
+                                                <Col span={10}>
+                                                    <Row>
+                                                        <Col span='24'>
+                                                            <Button
+                                                                className='float-right'
+                                                                type='primary'
+                                                                danger
+                                                                onClick={this.handleSendStopClick}
+                                                            >
+                                                                {this.state.sendingOutboundRequestID ? (this.state.resetExecutionOptionEnabled ? 'Reset' : 'Stop') : 'Run'}
+                                                            </Button>
+                                                            <Button
+                                                                className='float-right mr-2'
+                                                                type='dashed'
+                                                                danger
+                                                                onClick={() => { this.setState({ showIterationRunner: true }); }}
+                                                            >
+                                Iteration Runner
+                                                            </Button>
+                                                            <Button
+                                                                className='float-right mr-2'
+                                                                type='dashed'
+                                                                onClick={() => { this.setState({ showTemplate: true }); }}
+                                                            >
+                                Show Current Template
+                                                            </Button>
+                                                            {
+                                                                getConfig().isAuthEnabled
+                                                                    ? <>
+                                                                        <Button
+                                                                            className='float-right' type='primary' danger onClick={async e => {
+                                                                                this.setState({ historyReportsLocal: await this.historyReportsLocal() });
+                                                                                this.setState({ historyReportsVisible: true });
+                                                                            }}
+                                                                        >
+                                        Reports History
+                                                                        </Button>
+                                                                        {
+                                                                            this.state.historyReportsVisible
+                                                                                ? <Modal
+                                                                                    title='Reports History'
+                                                                                    visible={this.state.historyReportsVisible}
+                                                                                    width='70%'
+                                                                                    onOk={() => {
+                                                                                        this.setState({ historyReportsVisible: false });
+                                                                                    }}
+                                                                                    onCancel={() => {
+                                                                                        this.setState({ historyReportsVisible: false });
+                                                                                    }}
+                                                                                >
+                                                                                    <Row>
+                                                                                        <Col>
+                                                                                            <Table
+                                                                                                columns={this.state.historyReportsColumns}
+                                                                                                dataSource={this.historyReportsDataSource()}
+                                                                                            />
+                                                                                        </Col>
+                                                                                    </Row>
+                                                                                </Modal>
+                                                                                : null
+                                                                        }
+                                                                    </>
+                                                                    : null
+                                                            }
+                                                            {
+                                                                this.state.template.test_cases
+                                                                    ? (
+                                                                        <Checkbox
+                                                                            className='ml-2 mt-1 float-right'
+                                                                            onClick={e => {
+                                                                                this.handleBreakOnErrorChange(e.target.checked);
+                                                                            }}
+                                                                            checked={this.state.template.options?.breakOnError}
+                                                                        >
+                                                                            Break test run on error
+                                                                        </Checkbox>
+                                                                    )
+                                                                    : null
+                                                            }
+                                                        </Col>
+                                                    </Row>
+                                                    <Row className='mt-2'>
+                                                        <Col span='24'>
+                                                            {
+                                                                this.state.testReport
+                                                                    ? <Dropdown overlay={this.downloadReportMenu()}>
+                                                                        <Button
+                                                                            className='float-right'
+                                                                            type='primary'
+                                                                            shape='round'
+                                                                            onClick={e => e.preventDefault()}
+                                                                        >
+                                        Download Report
+                                                                        </Button>
+                                                                    </Dropdown>
+                                                                    : null
+                                                            }
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                            </Row>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            </div>
                         </Affix>
                         {
                             this.state.lastOutgoingRequestID

@@ -36,8 +36,8 @@ class AdminNavbar extends React.Component {
             <>
                 <Header
                     style={{
-                        height: '10vh',
-                        background: '#293e5d',
+                        height: '15vh',
+                        background: 'rgb(0 64 158)',
                     }}
                 >
                     <Row>
