@@ -61,34 +61,6 @@ const routes = [
         component: APIManagement,
         layout: '/admin',
     },
-    // {
-    //     path: '/monitoring',
-    //     name: 'Monitoring',
-    //     icon: <MonitorOutlined />,
-    //     component: Monitor,
-    //     layout: '/admin',
-    // },
-    // {
-    //     path: '/rules_response',
-    //     name: 'Sync Response Rules',
-    //     icon: <FileSyncOutlined />,
-    //     component: RulesResponse,
-    //     layout: '/admin',
-    // },
-    // {
-    //     path: '/rules_validation',
-    //     name: 'Validation Rules',
-    //     icon: <FileSearchOutlined />,
-    //     component: RulesValidation,
-    //     layout: '/admin',
-    // },
-    // {
-    //   path: "/rules_forward",
-    //   name: "Forward Rules",
-    //   icon: <UnorderedListOutlined />,
-    //   component: RulesForward,
-    //   layout: "/admin"
-    // },
     {
         path: '/rules_callback',
         name: 'Callback Rules',

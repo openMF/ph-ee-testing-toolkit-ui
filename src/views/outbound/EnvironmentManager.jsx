@@ -397,10 +397,6 @@ class EnvironmentManager extends React.Component {
                                     <Button
                                         type='default'
                                         info
-                                        // onClick={e => {
-                                        //     e.preventDefault();
-                                        //     this.environmentFileSelector.click();
-                                        // }}
                                         onClick={() => {
                                             this.handleDownloadEnvironmentInPostmanFormat(this.state.selectedEnvironmentIndex);
                                         }}
@@ -410,10 +406,6 @@ class EnvironmentManager extends React.Component {
                                     <Button
                                         type='default'
                                         info
-                                        // onClick={e => {
-                                        //     e.preventDefault();
-                                        //     this.environmentFileSelector.click();
-                                        // }}
                                         onClick={() => {
                                             this.handleDownloadEnvironment(this.state.selectedEnvironmentIndex);
                                         }}
