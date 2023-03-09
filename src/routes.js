@@ -55,33 +55,12 @@ const routes = [
         layout: '/admin',
     },
     {
-        path: '/monitoring',
-        name: 'Monitoring',
-        icon: <MonitorOutlined />,
-        component: Monitor,
+        path: '/apimgmt',
+        name: 'API Management',
+        icon: <ApiOutlined />,
+        component: APIManagement,
         layout: '/admin',
     },
-    {
-        path: '/rules_response',
-        name: 'Sync Response Rules',
-        icon: <FileSyncOutlined />,
-        component: RulesResponse,
-        layout: '/admin',
-    },
-    {
-        path: '/rules_validation',
-        name: 'Validation Rules',
-        icon: <FileSearchOutlined />,
-        component: RulesValidation,
-        layout: '/admin',
-    },
-    // {
-    //   path: "/rules_forward",
-    //   name: "Forward Rules",
-    //   icon: <UnorderedListOutlined />,
-    //   component: RulesForward,
-    //   layout: "/admin"
-    // },
     {
         path: '/rules_callback',
         name: 'Callback Rules',
@@ -117,19 +96,13 @@ const routes = [
     //   component: APIDocs,
     //   layout: "/admin"
     // },
-    {
-        path: '/apimgmt',
-        name: 'API Management',
-        icon: <ApiOutlined />,
-        component: APIManagement,
-        layout: '/admin',
-    },
-    {
-        path: '/demo',
-        name: 'Demos',
-        icon: <ExperimentOutlined />,
-        component: Demos,
-        layout: '/admin',
-    },
+    
+    // {
+    //     path: '/demo',
+    //     name: 'Demos',
+    //     icon: <ExperimentOutlined />,
+    //     component: Demos,
+    //     layout: '/admin',
+    // },
 ];
 export default routes;

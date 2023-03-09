@@ -28,7 +28,7 @@ import { FolderParser } from '@mojaloop/ml-testing-toolkit-shared-lib';
 import { DownOutlined } from '@ant-design/icons';
 import GitHubBrowser from './GitHubBrowser';
 
-import JSZip from 'jszip';
+import JSZip, { file } from 'jszip';
 const MASTERFILE_NAME = 'master.json';
 
 function readFileAsync(file) {
@@ -245,6 +245,203 @@ class FileManager extends React.Component {
         this.forceUpdate();
     };
 
+    handleNestedFolder = (testcase, path) => {
+
+        let lengt = testcase.item.length;
+
+        var arr = [];
+        var patharr = [];
+        patharr = path;
+        try {
+            patharr.push(testcase.name);
+        } catch (err){
+            console.log(err);
+        }
+
+        for(let z = 0; z < lengt; z++){
+            if(!testcase.item[z].item){
+                let res = this.handlepostmantestcases(testcase.item[z], patharr);
+                res.id = z + 1;
+                arr.push(res);
+            } else {
+                let folderitems = this.handleNestedFolder(testcase.item[z], patharr);
+                arr = arr.concat(folderitems);
+            }
+        }
+        return arr;
+    }
+
+    handlepostmantestcases = (testcase, path) => {
+        let request = {
+            'id': 1,
+            'path': path,
+            'meta': {
+                'info': testcase.name,
+            },
+            'description': testcase.name,
+            'apiVersion': {
+                'minorVersion': 1,
+                'majorVersion': 1,
+                'type': 'postman',
+                'asynchronous': false,
+            },
+            'operationPath': testcase.request.url.raw,
+            'method': testcase.request.method,
+            'headers': {},
+            'params': {},
+            'body': {},
+            'tests': {
+                'assertions': [],
+            },
+            'scriptingEngine': 'postman',
+            'scripts': {
+                'preRequest': {
+                    'exec': [],
+                },
+                'postRequest': {
+                    'exec': [],
+                },
+            },
+
+        };
+        let str = request.operationPath;
+        let mstr = '';
+        for(let k = 0; k < str.length; k = k + 1){
+            if(str[k] == '{' || str[k] == '}'){
+                mstr += str[k];
+                k = k + 1;
+            } else {
+                mstr += str[k];
+            }
+        }
+        request.operationPath = mstr;
+
+        if(testcase.request.body){
+            let json = testcase.request.body.raw;
+            if(json == ''){
+                request.body = {};
+            } else {
+                let contact  = JSON.parse(JSON.stringify(json));
+                let obj = JSON.parse(contact.replace(/\r?\n|\r/g, ''));
+            
+                request.body = obj;
+            }
+            
+        }
+        
+        
+        testcase.request.header.forEach(function (item, index) {
+            request.headers[item.key] = item.value;
+        });
+
+        if(testcase.request.url.query){
+            testcase.request.url.query.forEach(function (item, index) {
+                request.params[item.key] = item.value;
+            });
+        }
+        if(testcase.event){
+            testcase.event.forEach(function (item, index) {
+                if(item.listen == 'test'){
+                    request.scripts.postRequest.exec = item.script.exec;
+                }
+    
+                if(item.listen == 'prerequest'){
+                    request.scripts.preRequest.exec = item.script.exec;
+                }
+            });
+        }
+        
+        
+        return request;
+    }
+
+    handlePostmanCollectionFormat = (fileContent, fileName) => {
+        const content = {
+            'options': {},  
+            'name': 'multi',
+            'test_cases': [],
+        };
+        const arrlen = fileContent.item.length;
+
+        let ungroupedapis = {
+            'id': 1,
+            'name': 'ungrouped',
+            'fileInfo': {
+                'path': fileName,
+            },
+            'meta': {
+                'info': 'ungrouped',
+            },
+            'requests': [],
+        };
+        var k = 0;
+        var count = 0;
+
+        for(var i = 0; i < arrlen; i++){
+
+            if(!fileContent.item[i].item){
+                let res = this.handlepostmantestcases(fileContent.item[i], []);
+                res.id = k + 1;
+                ungroupedapis.requests.push(res);
+            } else {
+                count = count + 1;
+                let contentitem = {
+                    'id': count,
+                    'name': fileContent.item[i].name,
+                    'fileInfo': {
+                        'path': fileName,
+                    },
+                    'meta': {
+                        'info': fileContent.item[i].name,
+                    },
+                    'requests': [],
+                };
+                contentitem.id = i + 1;
+                contentitem.name = fileContent.item[i].name;
+                
+                try {
+                    let testcases = fileContent.item[i].item;
+                    let testcaselen = testcases.length;
+                    var patharr = [];
+                    patharr.push(fileContent.item[i].name);
+                    console.log(testcaselen);
+
+
+                    for(var j = 0; j < testcaselen; j++){
+                        try {
+                            if(!testcases[j].item){
+                                let res = this.handlepostmantestcases(testcases[j], patharr);
+                                res.id = j + 1;
+                                contentitem.requests.push(res);
+                                console.log(j);
+                            } else {
+                                let folderitems = this.handleNestedFolder(testcases[j], patharr);
+                                contentitem.requests = contentitem.requests.concat(folderitems);
+                            }
+                        } catch (err) {
+                            console.log(err);
+                        }
+                        
+                    }
+                    contentitem.requests.push(res);
+                } catch (err) {
+                    console.log(err);
+                }
+                
+                content.test_cases.push(contentitem);
+            }
+            
+        }
+        count = count + 1;
+        ungroupedapis.id = count;
+        if(ungroupedapis.requests.length){
+            content.test_cases.push(ungroupedapis);
+        }
+        console.log(content);
+        return content;
+
+    }
+
     handleLocalFileOrFolderImportCollection = async fileList => {
         message.loading({ content: 'Reading the selected files...', key: 'importFileProgress' });
         const importFolderRawData = [];
@@ -254,7 +451,14 @@ class FileManager extends React.Component {
                 // const fileRead = new FileReader();
                 try {
                     const content = await readFileAsync(fileToRead);
-                    const fileContent = JSON.parse(content);
+                    let fileContent = JSON.parse(content);
+                    console.log(fileContent);
+                    if(fileContent.item){
+                        console.log('validates');
+                        const fileContents = this.handlePostmanCollectionFormat(fileContent, fileToRead.name);
+                        console.log(fileContents);
+                        fileContent = fileContents;
+                    }
                     importFolderRawData.push({
                         name: fileToRead.name,
                         path: fileToRead.webkitRelativePath ? fileToRead.webkitRelativePath : fileToRead.name,
@@ -262,6 +466,7 @@ class FileManager extends React.Component {
                         modified: fileToRead.lastModified,
                         content: fileContent,
                     });
+                    console.log(importFolderRawData);
                 } catch (err) {
                     message.error({ content: err.message, key: 'importFileProgress', duration: 2 });
                     break;

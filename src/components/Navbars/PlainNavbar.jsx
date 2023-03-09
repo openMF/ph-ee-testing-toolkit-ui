@@ -34,7 +34,7 @@ class PlainNavbar extends React.Component {
             <>
                 <Header
                     style={{
-                        height: '10vh',
+                        height: '20vh',
                         background: '#293e5d',
                     }}
                 >

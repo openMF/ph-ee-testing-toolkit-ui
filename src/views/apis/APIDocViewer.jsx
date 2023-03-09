@@ -39,7 +39,7 @@ class APIDocViewer extends React.Component {
                             this.props.specUrl
                                 ? (
                                     <RedocStandalone
-                                        specUrl={this.props.specUrl}
+                                        spec={this.props.specUrl}
                                         options={{
                                             nativeScrollbars: true,
                                             theme: { colors: { primary: { main: '#dd5522' } } },

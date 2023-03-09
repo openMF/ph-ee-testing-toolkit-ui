@@ -1,5 +1,5 @@
 export const TTKColors = {
-    header: 'rgb(41, 62, 93)',
+    header: 'rgb(6, 78, 183)',
     title: '#fff',
     assertionPassed: '#87d068',
     assertionFailed: '#f50',

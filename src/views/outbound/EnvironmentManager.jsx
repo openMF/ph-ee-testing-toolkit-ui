@@ -27,7 +27,7 @@ import axios from 'axios';
 import { LocalDB } from '../../services/localDB/LocalDB';
 import InputValues from './InputValues';
 
-import { Row, Col, Table, Button, message, Input, Dropdown, Menu, Collapse, Popover } from 'antd';
+import { Row, Col, Table, Button, message, Input, Dropdown, Menu, Collapse, Popover, Modal } from 'antd';
 import { DownOutlined, FileOutlined } from '@ant-design/icons';
 
 const { Panel } = Collapse;
@@ -58,7 +58,21 @@ class EnvironmentManager extends React.Component {
         renameEnvironmentNewName: '',
         renameEnvironementDialogVisible: false,
         environmentOptionsVisible: false,
+        isImportDialogOpen:false,
+
     };
+
+    handleOpenImportDialog = key => {
+        this.setState({
+            isImportDialogOpen: true,
+        });
+    }
+
+    handleCloseImportDialog = key => {
+        this.setState({
+            isImportDialogOpen: false,
+        });
+    }
 
     getServerEnvironments = async () => {
         const response = await axios.get(this.apiBaseUrl + '/api/samples/list/environments');
@@ -163,8 +177,18 @@ class EnvironmentManager extends React.Component {
             name: environmentFileName,
             inputValues,
         });
+        console.log(this.state.localEnvironments);
         this.autoSave = true;
+        this.handleCloseImportDialog();
         this.forceUpdate();
+    };
+
+    addLocalEnvironmentInPostmanFormat = (environmentFileName, inputValues) => {
+        let arr = {};
+        inputValues.forEach(function (item, index) {
+            arr[item.key] = item.value;
+        });
+        this.addLocalEnvironment(environmentFileName, arr);
     };
 
     handleDeleteEnvironment = key => {
@@ -197,6 +221,28 @@ class EnvironmentManager extends React.Component {
         download(JSON.stringify(contentObj, null, 2), this.state.localEnvironments[key].name, 'text/plain');
     };
 
+    handleDownloadEnvironmentInPostmanFormat = key => {
+        let valueItem = {
+            'key': '',
+            'value': '',
+            'type': 'default',
+            'enabled': true,
+        };
+        let valuesarr = [];
+        for(const [keyy, value] of Object.entries(this.state.localEnvironments[key].inputValues)) {
+            valueItem.key = keyy;
+            valueItem.value = value;
+            valuesarr.push(valueItem);
+        }
+        const contentObj = {
+            id: '454',
+            name: this.state.localEnvironments[key].name,
+            values: valuesarr,
+        };
+        console.log('hereyy');
+        download(JSON.stringify(contentObj, null, 2), this.state.localEnvironments[key].name, 'text/plain');
+    };
+
     handleImportEnvironmentFile = file_to_read => {
         message.loading({ content: 'Reading the file...', key: 'importFileProgress' });
         const fileRead = new FileReader();
@@ -206,6 +252,9 @@ class EnvironmentManager extends React.Component {
                 const templateContent = JSON.parse(content);
                 if(templateContent.inputValues) {
                     this.addLocalEnvironment(file_to_read.name, templateContent.inputValues);
+                    message.success({ content: 'Environment Loaded', key: 'importFileProgress', duration: 2 });
+                } else if(templateContent.values){
+                    this.addLocalEnvironmentInPostmanFormat(file_to_read.name, templateContent.values);
                     message.success({ content: 'Environment Loaded', key: 'importFileProgress', duration: 2 });
                 } else {
                     message.error({ content: 'Input Values not found in the file', key: 'importFileProgress', duration: 2 });
@@ -344,6 +393,26 @@ class EnvironmentManager extends React.Component {
                             }}
                         >
                             <Panel header={this.state.localEnvironments[this.state.selectedEnvironmentIndex] ? this.state.localEnvironments[this.state.selectedEnvironmentIndex].name : 'Choose environment'} key='1'>
+                                <Modal zIndex={1101} title="Export Environment" open={this.state.isImportDialogOpen} onOk={this.handleCloseImportDialog} onCancel={this.handleCloseImportDialog}>
+                                    <Button
+                                        type='default'
+                                        info
+                                        onClick={() => {
+                                            this.handleDownloadEnvironmentInPostmanFormat(this.state.selectedEnvironmentIndex);
+                                        }}
+                                    >
+                    Export as Postman Format
+                                    </Button>
+                                    <Button
+                                        type='default'
+                                        info
+                                        onClick={() => {
+                                            this.handleDownloadEnvironment(this.state.selectedEnvironmentIndex);
+                                        }}
+                                    >
+                    Export as TTK format
+                                    </Button>
+                                </Modal>
                                 <Row>
                                     <Col span={24}>
                                         <Button
@@ -359,9 +428,8 @@ class EnvironmentManager extends React.Component {
                                         <Button
                                             className='ml-2'
                                             type='primary'
-                                            onClick={() => {
-                                                this.handleDownloadEnvironment(this.state.selectedEnvironmentIndex);
-                                            }}
+                                            onClick={this.handleOpenImportDialog}
+                                            
                                             disabled={this.state.selectedEnvironmentIndex === null}
                                         >
                       Download

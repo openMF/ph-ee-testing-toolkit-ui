@@ -25,7 +25,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { Layout, Row, Col, Menu, Typography } from 'antd';
-import logo from '../../assets/img/mojaloop.png';
+// import logo from '../../assets/img/mojaloop.png';
 
 const { Title } = Typography;
 const { Sider } = Layout;
@@ -92,7 +92,7 @@ class Sidebar extends React.Component {
                         <img
                             alt='Mojaloop'
                             className='img-fluid'
-                            src={logo}
+                            src={'https://media.licdn.com/dms/image/C510BAQF_OqFdPJpOvg/company-logo_200_200/0/1578697983447?e=1681344000&v=beta&t=-1_bJG27p6PYlOh3B6ibyWcXWaLdqQWp5cpX3JUSAy8'}
                         />
                     </Col>
                     <Col span={4} />
