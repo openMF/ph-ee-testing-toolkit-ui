@@ -326,12 +326,18 @@ class FileManager extends React.Component {
             
                 request.body = obj;
             }
-            
+
         }
         
         
         testcase.request.header.forEach(function (item, index) {
             request.headers[item.key] = item.value;
+            if(item.value[1] == '{') {
+                request.headers[item.key] = '{$inputs.' + item.value.substring(2, item.value.length - 2) + '}';
+            } else {
+                request.headers[item.key] = item.value;
+            }
+            console.log('{$inputs.' + item.value.substring(2, item.value.length - 2) + '}');
         });
 
         if(testcase.request.url.query){
